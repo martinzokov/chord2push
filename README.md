@@ -1,102 +1,147 @@
-# Ableton Push 2 Chord Translator
+# Ableton Push Chord Translator
 
-A Next.js web application that helps musicians translate piano chords to Ableton Push 2 pad layouts in Scale Mode (4ths layout).
+A Next.js web application that helps musicians translate piano chords to Ableton Push pad layouts. This tool provides visual mapping between traditional piano chord fingerings and Push's 8x8 grid in both Scale Mode layouts (4ths and 3rds).
+
+⚠️ NB: This project was vibe-coded entirely so I shift all responsibility for bad code to Claude 4 :) 
 
 ## Features
 
-- **Interactive Piano Roll**: Click on piano keys to select chord notes
-- **Real-time Chord Detection**: Automatically detects and names chords as you select notes
-- **Push 2 Grid Visualization**: Shows the 8x8 Push grid in 4ths mode layout
-- **Scale Mode Support**: Works with Major, Minor, Dorian, and Mixolydian scales
-- **Root Note Highlighting**: Red pads show all root notes for orientation
-- **Chord Tone Highlighting**: Orange pads show chord tones on the Push grid
-- **Quick Chord Presets**: Common chords available with one click
+### Piano Roll Interface
+- **Interactive Piano Keyboard**: Click notes to build chords across 2 octaves
+- **Dual Mode Support**:
+  - **In Key Mode**: Only scale notes are clickable
+  - **Chromatic Mode**: All 12 notes are selectable
+- **Octave Navigation**: Navigate through octaves 0-5
+- **Quick Chord Presets**: One-click chord suggestions based on selected scale
+- **Visual Feedback**: Clear distinction between scale notes, chromatic notes, and selected notes
 
-## How It Works
+### Push 2 Grid Visualization
+- **Accurate 8x8 Grid**: Mirrors your Push 2 hardware layout
+- **Multiple Layout Modes**:
+  - **4ths Layout**: Traditional 4ths interval pattern
+  - **3rds Layout**: Alternative 3rds interval pattern
+- **Dual Mode Support**:
+  - **In Key Mode**: Shows only scale notes
+  - **Chromatic Mode**: Shows all 12 notes with proper chromatic progression
+- **Color-Coded Display**:
+  - **Red**: Root notes
+  - **Yellow**: Selected notes
+  - **Beige**: Available scale notes
+- **Interactive Legend**: Clear visual reference for pad colors
 
-### Scale Mode (4ths Layout)
-In Scale Mode, the Push 2's 8×8 grid shows only notes from the selected scale:
-- **Move right →** = next note in the scale
-- **Move up ↑** = a fourth up in the scale (5 scale steps higher)
-- **No wrong notes** — only scale notes are available
-- **Consistent patterns** — chord shapes stay the same across all keys
+### Scale Support
+- **12 Popular Scales**:
+  - Major, Minor, Harmonic Minor, Melodic Minor
+  - Pentatonic Major, Pentatonic Minor, Blues
+  - Dorian, Phrygian, Lydian, Mixolydian
+- **All 12 Keys**: Complete chromatic key support with enharmonic equivalents
+- **Real-time Updates**: Grid updates automatically when scale changes
 
-### Color Coding
-- **Red pads**: Root notes (e.g., all C's in C major scale)
-- **Orange pads**: Chord tones from your selected chord
-- **Beige pads**: Other scale notes
+### Music Theory Integration
+- **Automatic Chord Detection**: Detects chord names from selected notes
+- **Scale-aware Chord Suggestions**: Context-appropriate chord presets
+- **Interval Calculations**: Accurate music theory computations
 
-## Getting Started
+## Installation
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+1. **Clone the repository**:
+```bash
+git clone <repository-url>
+cd ableton-notes
+```
 
-2. **Run the development server**:
-   ```bash
-   npm run dev
-   ```
+2. **Install dependencies**:
+```bash
+npm install
+```
 
-3. **Open your browser** and navigate to `http://localhost:3000`
+3. **Run the development server**:
+```bash
+npm run dev
+```
+
+4. **Open your browser** and navigate to `http://localhost:3000` (or `http://localhost:3001` if port 3000 is in use)
 
 ## Usage
 
-1. **Select a Scale**: Use the dropdown menus to choose your root note and scale type
-2. **Input a Chord**: 
-   - Click on piano keys to select notes
-   - Use the quick chord presets for common chords
-   - The app will automatically detect and name your chord
-3. **View on Push Grid**: See how to play the chord on your Push 2 in the grid visualization
-4. **Learn the Layout**: Red pads show root notes, orange pads show your chord tones
+### Basic Workflow
+1. **Select your scale** using the key and scale type dropdowns
+2. **Choose your layout** (4ths or 3rds) to match your Push 2 settings
+3. **Select push grid mode** (In Key or Chromatic)
+4. **Set piano roll mode** (In Key or Chromatic) 
+5. **Click notes** on the piano roll to build your chord
+6. **View the mapping** on the Push 2 grid visualization
 
-## Example Workflow
+### Piano Roll Modes
+- **In Key Mode**: Only notes from the selected scale are clickable (shown in white/black)
+- **Chromatic Mode**: All 12 notes are selectable (scale notes in white/black, chromatic notes in gray)
 
-1. Set scale to "C Major"
-2. Click on C, E, G keys in the piano roll
-3. App detects "C Major" chord
-4. Push grid shows C Major chord tones highlighted in orange
-5. All C notes are highlighted in red for orientation
+### Push Grid Modes
+- **In Key Mode**: 
+  - Shows only scale notes arranged in the selected layout pattern
+  - Root notes follow the traditional Push 2 scale mode patterns
+- **Chromatic Mode**: 
+  - Shows all 12 notes in chromatic progression
+  - Root notes positioned according to Push 2's chromatic layout patterns
+  - Each column = +1 semitone, each row = +4 semitones (3rds) or +5 semitones (4ths)
+
+### Layout Patterns
+
+#### 4ths Layout Root Positions
+- **In Key**: Traditional Push 2 scale mode pattern
+- **Chromatic**: Root notes at positions matching Push 2's chromatic 4ths layout
+
+#### 3rds Layout Root Positions  
+- **In Key**: Traditional Push 2 scale mode pattern
+- **Chromatic**: Root notes at specific grid positions (1,1), (3,5), (4,1), (6,5), (7,1)
 
 ## Technical Details
 
-- Built with Next.js 14 and TypeScript
-- Uses Tailwind CSS for styling
-- Implements music theory algorithms for chord detection
-- Calculates Push 2 4ths mode layout mathematically
-- Responsive design works on desktop and mobile
+### Built With
+- **Next.js 14**: React framework with TypeScript
+- **Tailwind CSS**: Utility-first CSS framework
+- **TypeScript**: Type-safe JavaScript
 
-## Supported Scales
+### Key Components
+- `PianoRoll.tsx`: Interactive piano keyboard component
+- `PushGrid.tsx`: Push 2 grid visualization component
+- `musicTheory.ts`: Music theory utilities and calculations
 
-- Major
-- Minor  
-- Dorian
-- Mixolydian
+### Music Theory Implementation
+- **Note System**: 12-tone equal temperament
+- **Scale Generation**: Algorithmic scale construction
+- **Chord Detection**: Pattern-based chord recognition
+- **Interval Calculations**: Semitone-based interval arithmetic
 
-## Supported Chords
+## Project Structure
 
-- Major and Minor triads
-- Diminished and Augmented triads
-- 7th chords (Major 7, Minor 7, Dominant 7, Minor 7b5)
-- Extended chords (Major 9, Minor 9)
-
-## Development
-
-```bash
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
+```
+ableton-notes/
+├── app/
+│   ├── components/
+│   │   ├── PianoRoll.tsx    # Piano keyboard interface
+│   │   └── PushGrid.tsx     # Push 2 grid visualization
+│   ├── types/
+│   │   └── music.ts         # TypeScript type definitions
+│   ├── utils/
+│   │   └── musicTheory.ts   # Music theory calculations
+│   ├── globals.css          # Global styles
+│   ├── layout.tsx           # Root layout component
+│   └── page.tsx             # Main application page
+├── package.json
+├── tailwind.config.js
+├── tsconfig.json
+└── README.md
 ```
 
 ## Contributing
 
-This app is designed to help musicians bridge the gap between traditional piano knowledge and the Push 2's unique layout. Contributions welcome!
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT License 
+This project is open source and available under the [MIT License](LICENSE).
