@@ -16,6 +16,7 @@ export default function Home() {
   const [currentScale, setCurrentScale] = useState('C')
   const [scaleType, setScaleType] = useState('major')
   const [layout, setLayout] = useState('4ths')
+  const [mode, setMode] = useState('in-key')
 
   const handleChordChange = (chord: Chord | null) => {
     setSelectedChord(chord)
@@ -51,7 +52,7 @@ export default function Home() {
 
           {/* Push Grid Section */}
           <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Push 2 Grid ({layout} Mode)</h2>
+            <h2 className="text-xl font-semibold mb-4">Push 2 Grid ({layout} - {mode})</h2>
             
             {/* Scale Controls */}
             <div className="mb-4 flex gap-4 flex-wrap">
@@ -100,6 +101,15 @@ export default function Home() {
                 <option value="4ths">4ths Layout</option>
                 <option value="3rds">3rds Layout</option>
               </select>
+              
+              <select 
+                value={mode} 
+                onChange={(e) => setMode(e.target.value)}
+                className="px-3 py-2 bg-gray-700 rounded text-white"
+              >
+                <option value="in-key">In Key</option>
+                <option value="chromatic">Chromatic</option>
+              </select>
             </div>
 
             <PushGrid 
@@ -108,6 +118,7 @@ export default function Home() {
               scale={currentScale} 
               scaleType={scaleType}
               layout={layout}
+              mode={mode}
             />
           </div>
         </div>

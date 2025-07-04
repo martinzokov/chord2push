@@ -13,6 +13,7 @@ export interface PushPad {
   isChordTone: boolean
   isSelectedNote: boolean
   isActive: boolean
+  isInScale: boolean
 }
 
 export interface Scale {

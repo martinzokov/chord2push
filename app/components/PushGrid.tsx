@@ -15,26 +15,27 @@ interface PushGridProps {
   scale: string
   scaleType: string
   layout: string
+  mode: string
 }
 
-export default function PushGrid({ selectedChord, selectedNoteOctaves, scale, scaleType, layout }: PushGridProps) {
+export default function PushGrid({ selectedChord, selectedNoteOctaves, scale, scaleType, layout, mode }: PushGridProps) {
   const currentScale = useMemo(() => {
     return generateScale(scale as any, scaleType as ScaleType)
   }, [scale, scaleType])
 
   const gridData = useMemo(() => {
-    return generatePushGrid(currentScale, selectedChord, layout, selectedNoteOctaves)
-  }, [currentScale, selectedChord, layout, selectedNoteOctaves])
+    return generatePushGrid(currentScale, selectedChord, layout, selectedNoteOctaves, mode)
+  }, [currentScale, selectedChord, layout, selectedNoteOctaves, mode])
 
   const getPadColor = (pad: any) => {
     if (pad.isRoot) {
       return 'bg-push-red' // Root notes are red
-    } else if (pad.isChordTone) {
-      return 'bg-orange-500' // Chord tones are orange
     } else if (pad.isSelectedNote) {
-      return 'bg-yellow-500' // Individual selected notes are yellow
+      return 'bg-yellow-500' // Selected notes are yellow
+    } else if (pad.isInScale) {
+      return 'bg-push-pad' // Scale notes are beige
     } else {
-      return 'bg-push-pad' // Regular scale notes are beige
+      return 'bg-gray-600' // Non-scale notes are dark gray (chromatic mode)
     }
   }
 
@@ -54,10 +55,13 @@ export default function PushGrid({ selectedChord, selectedNoteOctaves, scale, sc
     <div className="bg-push-grid p-4 rounded-lg">
       <div className="mb-4">
         <p className="text-sm text-gray-300">
-          Scale: {scale} {scaleType} | 4ths Mode Layout
+          Scale: {scale} {scaleType} | {layout} Layout | {mode} Mode
         </p>
         <p className="text-xs text-gray-400 mt-1">
-          Move right → next scale note | Move up → {layout === '3rds' ? 'third interval (2 scale steps)' : 'fourth interval (4 scale steps)'}
+          {mode === 'chromatic' 
+            ? `Move right → +1 semitone | Move up → +${layout === '3rds' ? '3' : '5'} semitones (${layout === '3rds' ? 'minor third' : 'perfect fourth'})`
+            : `Move right → next scale note | Move up → ${layout === '3rds' ? 'third interval (2 scale steps)' : 'fourth interval (3 scale steps)'}`
+          }
         </p>
       </div>
       
@@ -104,6 +108,12 @@ export default function PushGrid({ selectedChord, selectedNoteOctaves, scale, sc
             <div className="w-4 h-4 bg-push-pad rounded border border-gray-600"></div>
             <span>Scale Notes</span>
           </div>
+          {mode === 'chromatic' && (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-gray-600 rounded border border-gray-600"></div>
+              <span>Non-Scale Notes</span>
+            </div>
+          )}
         </div>
       </div>
       
