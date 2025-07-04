@@ -17,6 +17,7 @@ export default function Home() {
   const [scaleType, setScaleType] = useState('major')
   const [layout, setLayout] = useState('4ths')
   const [mode, setMode] = useState('in-key')
+  const [pianoRollMode, setPianoRollMode] = useState('in-key')
 
   const handleChordChange = (chord: Chord | null) => {
     setSelectedChord(chord)
@@ -35,18 +36,32 @@ export default function Home() {
     <div className="min-h-screen bg-push-dark p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8 text-center">
-          Ableton Push 2 Chord Translator
+          Ableton Push Chord Translator
         </h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Piano Roll Section */}
           <div className="bg-gray-800 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Piano Roll - Select Chord</h2>
+            <h2 className="text-xl font-semibold mb-4">Piano Roll - Select Chord ({pianoRollMode})</h2>
+            
+            {/* Piano Roll Mode Toggle */}
+            <div className="mb-4">
+              <select 
+                value={pianoRollMode} 
+                onChange={(e) => setPianoRollMode(e.target.value)}
+                className="px-3 py-2 bg-gray-700 rounded text-white"
+              >
+                <option value="in-key">In Key</option>
+                <option value="chromatic">Chromatic</option>
+              </select>
+            </div>
+            
             <PianoRoll 
               onChordChange={handleChordChange} 
               onNotesChange={handleNotesChange}
               scale={currentScale} 
               scaleType={scaleType} 
+              mode={pianoRollMode}
             />
           </div>
 

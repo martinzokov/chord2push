@@ -9,6 +9,7 @@ interface PianoRollProps {
   onNotesChange: (noteOctaves: NoteOctave[]) => void
   scale: string
   scaleType: string
+  mode: string
 }
 
 interface NoteOctave {
@@ -16,7 +17,7 @@ interface NoteOctave {
   octave: number
 }
 
-export default function PianoRoll({ onChordChange, onNotesChange, scale, scaleType }: PianoRollProps) {
+export default function PianoRoll({ onChordChange, onNotesChange, scale, scaleType, mode }: PianoRollProps) {
   const [selectedNoteOctaves, setSelectedNoteOctaves] = useState<NoteOctave[]>([])
   const [currentOctave, setCurrentOctave] = useState(3)
   
@@ -60,8 +61,8 @@ export default function PianoRoll({ onChordChange, onNotesChange, scale, scaleTy
   }, [selectedNoteOctaves, onChordChange, onNotesChange])
 
   const toggleNote = (note: Note, octave: number) => {
-    // Only allow toggling notes that are in the current scale
-    if (!isNoteInScale(note)) return
+    // In chromatic mode, allow all notes; in in-key mode, only allow scale notes
+    if (mode === 'in-key' && !isNoteInScale(note)) return
     
     setSelectedNoteOctaves(prev => {
       const existingIndex = prev.findIndex(noteOctave => noteOctave.note === note && noteOctave.octave === octave)
@@ -141,18 +142,21 @@ export default function PianoRoll({ onChordChange, onNotesChange, scale, scaleTy
         <div className="flex h-full">
           {allNotes.filter(({ note }) => !isBlackKey(note)).map(({ note, octave }, index) => {
             const inScale = isNoteInScale(note)
+            const isClickable = mode === 'chromatic' || inScale
             return (
               <button
                 key={`${note}${octave}`}
-                onClick={() => inScale && toggleNote(note, octave)}
-                disabled={!inScale}
+                onClick={() => isClickable && toggleNote(note, octave)}
+                disabled={!isClickable}
                 className={`
                   flex-1 h-full border-r border-gray-400 flex items-end justify-center pb-2 text-xs font-medium
-                  ${!inScale 
+                  ${!isClickable 
                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
                     : selectedNoteOctaves.some(noteOctave => noteOctave.note === note && noteOctave.octave === octave) 
                       ? 'bg-blue-500 text-white' 
-                      : 'bg-white text-black hover:bg-gray-100 cursor-pointer'
+                      : inScale 
+                        ? 'bg-white text-black hover:bg-gray-100 cursor-pointer'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer'
                   }
                 `}
               >
@@ -174,6 +178,7 @@ export default function PianoRoll({ onChordChange, onNotesChange, scale, scaleTy
             if (blackKeyIndex === -1) return null
             
             const inScale = isNoteInScale(note)
+            const isClickable = mode === 'chromatic' || inScale
             
             // Calculate position based on which octave this is in the current view
             const octaveInView = octave - currentOctave // 0 for first octave, 1 for second octave
@@ -182,15 +187,17 @@ export default function PianoRoll({ onChordChange, onNotesChange, scale, scaleTy
             return (
               <button
                 key={`${note}${octave}`}
-                onClick={() => inScale && toggleNote(note, octave)}
-                disabled={!inScale}
+                onClick={() => isClickable && toggleNote(note, octave)}
+                disabled={!isClickable}
                 className={`
                   absolute w-6 h-20 rounded-b text-xs font-medium flex items-end justify-center pb-1 border border-gray-600
-                  ${!inScale 
+                  ${!isClickable 
                     ? 'bg-gray-500 text-gray-300 cursor-not-allowed border-gray-500' 
                     : selectedNoteOctaves.some(noteOctave => noteOctave.note === note && noteOctave.octave === octave) 
                       ? 'bg-blue-600 text-white border-blue-400' 
-                      : 'bg-black text-white hover:bg-gray-900 cursor-pointer'
+                      : inScale 
+                        ? 'bg-black text-white hover:bg-gray-900 cursor-pointer'
+                        : 'bg-gray-600 text-gray-300 hover:bg-gray-700 cursor-pointer border-gray-500'
                   }
                 `}
                 style={{
