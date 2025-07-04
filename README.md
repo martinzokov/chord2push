@@ -1,5 +1,7 @@
 # Ableton Push Chord Translator
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://chord2push.vercel.app/)
+
 A Next.js web application that helps musicians translate piano chords to Ableton Push pad layouts. This tool provides visual mapping between traditional piano chord fingerings and Push's 8x8 grid in both Scale Mode layouts (4ths and 3rds).
 
 ⚠️ NB: This project was vibe-coded entirely so I shift all responsibility for bad code to Claude 4 :) 
